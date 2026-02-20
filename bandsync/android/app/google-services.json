@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "623411610010",
+    "project_id": "bandsync-c6983",
+    "storage_bucket": "bandsync-c6983.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623411610010:android:7880e32c17a33eb3ebba23",
+        "android_client_info": {
+          "package_name": "com.example.bandsync"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZTtZkqNlRVSwNTYIKzcQ6UnPZhZ9I4eI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
