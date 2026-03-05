@@ -63,42 +63,27 @@ class AudioAnalyzer:
     
     def detect_key(self, y, sr):
         """Detect musical key using chromagram and Krumhansl-Schmuckler algorithm"""
-        # Get chromagram
         chroma = librosa.feature.chroma_cqt(y=y, sr=sr)
         chroma_avg = np.mean(chroma, axis=1)
-        
-        # Normalize
         chroma_avg = chroma_avg / np.sum(chroma_avg)
         
-        # Calculate correlation with major and minor profiles
         major_correlations = []
         minor_correlations = []
         
         for i in range(12):
-            # Rotate profiles
             major_rotated = np.roll(self.major_profile, i)
             minor_rotated = np.roll(self.minor_profile, i)
-            
-            # Calculate correlation
             major_corr = np.corrcoef(chroma_avg, major_rotated)[0, 1]
             minor_corr = np.corrcoef(chroma_avg, minor_rotated)[0, 1]
-            
             major_correlations.append(major_corr)
             minor_correlations.append(minor_corr)
         
-        # Find best match
-        max_major = max(major_correlations)
-        max_minor = max(minor_correlations)
+        max_major_idx = np.argmax(major_correlations)
+        max_minor_idx = np.argmax(minor_correlations)
         
-        if max_major > max_minor:
-            key_index = major_correlations.index(max_major)
-            scale = 'major'
+        if major_correlations[max_major_idx] > minor_correlations[max_minor_idx]:
+            return self.note_names[max_major_idx], 'major'
         else:
-            key_index = minor_correlations.index(max_minor)
-            scale = 'minor'
-        
-        key = self.note_names[key_index]
-        
-        return key, scale
+            return self.note_names[max_minor_idx], 'minor'
     
 
