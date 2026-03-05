@@ -6,8 +6,11 @@ load_dotenv()
 
 class AIAnalyzer:
     def __init__(self):
-        api_key = os.getenv('OPENAI_API_KEY')
-        self.client = OpenAI(api_key=api_key) if api_key else None
+        try:
+            api_key = os.getenv('OPENAI_API_KEY')
+            self.client = OpenAI(api_key=api_key) if api_key else None
+        except:
+            self.client = None
     
     def analyze_chord_progression(self, key, scale, chords, tempo):
         """Use AI to analyze chord progression and provide insights"""

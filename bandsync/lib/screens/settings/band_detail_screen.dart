@@ -8,7 +8,8 @@ import '../../state/library_provider.dart';
 import '../library/import_song_screen.dart';
 import '../library/chord_sheet_editor_screen.dart';
 import '../library/lyrics_screen.dart';
-import '../library/setlist_detail_screen.dart';
+import 'band_chat_screen.dart';
+import 'band_setlist_detail_screen.dart';
 
 class BandDetailScreen extends StatelessWidget {
   final Band band;
@@ -18,7 +19,7 @@ class BandDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: Text(band.name),
@@ -27,6 +28,7 @@ class BandDetailScreen extends StatelessWidget {
             tabs: [
               Tab(text: 'Members'),
               Tab(text: 'Setlists'),
+              Tab(text: 'Chat'),
             ],
           ),
         ),
@@ -34,6 +36,7 @@ class BandDetailScreen extends StatelessWidget {
           children: [
             _MembersTab(bandId: band.id),
             _SetlistsTab(bandId: band.id),
+            BandChatScreen(bandId: band.id),
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -315,7 +318,7 @@ class _SetlistsTab extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SetlistDetailScreen(setlist: setlist),
+                      builder: (context) => BandSetlistDetailScreen(setlist: setlist, bandId: bandId),
                     ),
                   );
                 },

@@ -10,25 +10,33 @@ class BandsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: const Text('My Bands', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         elevation: 0,
       ),
-      body: FutureBuilder(
-        future: _checkAuth(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          
-          if (snapshot.hasError) {
-            return _buildErrorState(context);
-          }
-          
-          return _buildBandsList(context);
-        },
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF090D17), Color(0xFF111E33), Color(0xFF221236)],
+          ),
+        ),
+        child: FutureBuilder(
+          future: _checkAuth(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            
+            if (snapshot.hasError) {
+              return _buildErrorState(context);
+            }
+            
+            return _buildBandsList(context);
+          },
+        ),
       ),
       floatingActionButton: _buildFABs(context),
     );
@@ -56,7 +64,7 @@ class BandsScreen extends StatelessWidget {
           final bands = snapshot.data ?? [];
 
           if (bands.isEmpty) {
-            return _buildEmptyState();
+            return _buildEmptyState(context);
           }
 
           return ListView.builder(
@@ -74,7 +82,8 @@ class BandsScreen extends StatelessWidget {
     }
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -82,10 +91,10 @@ class BandsScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Colors.deepPurple[50],
+              color: colorScheme.primaryContainer.withValues(alpha: 0.35),
               shape: BoxShape.circle,
             ),
-            child: Icon(Icons.group_outlined, size: 80, color: Colors.deepPurple[300]),
+            child: Icon(Icons.group_outlined, size: 80, color: colorScheme.primary),
           ),
           const SizedBox(height: 24),
           const Text(
@@ -96,7 +105,7 @@ class BandsScreen extends StatelessWidget {
           Text(
             'Create or join a band to start\ncollaborating with your bandmates',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+            style: TextStyle(fontSize: 16, color: colorScheme.onSurfaceVariant),
           ),
         ],
       ),
@@ -125,12 +134,11 @@ class BandsScreen extends StatelessWidget {
   }
 
   Widget _buildBandCard(BuildContext context, Band band) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Card(
-      elevation: 2,
       margin: const EdgeInsets.only(bottom: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         onTap: () {
           Navigator.push(
             context,
@@ -147,16 +155,14 @@ class BandsScreen extends StatelessWidget {
                 width: 60,
                 height: 60,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.deepPurple, Colors.deepPurple[300]!],
-                  ),
-                  borderRadius: BorderRadius.circular(12),
+                  color: colorScheme.primaryContainer,
+                  borderRadius: BorderRadius.circular(14),
                 ),
                 child: Center(
                   child: Text(
                     band.name[0].toUpperCase(),
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: colorScheme.onPrimaryContainer,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
@@ -178,12 +184,12 @@ class BandsScreen extends StatelessWidget {
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        Icon(Icons.key, size: 16, color: Colors.grey[600]),
+                        Icon(Icons.key, size: 16, color: colorScheme.onSurfaceVariant),
                         const SizedBox(width: 4),
                         Text(
                           band.inviteCode,
                           style: TextStyle(
-                            color: Colors.grey[600],
+                            color: colorScheme.onSurfaceVariant,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -191,15 +197,18 @@ class BandsScreen extends StatelessWidget {
                         InkWell(
                           onTap: () {
                             Clipboard.setData(ClipboardData(text: band.inviteCode));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Invite code copied')),
+                            );
                           },
-                          child: Icon(Icons.copy, size: 16, color: Colors.grey[600]),
+                          child: Icon(Icons.copy, size: 16, color: colorScheme.onSurfaceVariant),
                         ),
                       ],
                     ),
                   ],
                 ),
               ),
-              Icon(Icons.arrow_forward_ios, color: Colors.grey[400]),
+              Icon(Icons.arrow_forward_ios, color: colorScheme.outline),
             ],
           ),
         ),
@@ -214,8 +223,6 @@ class BandsScreen extends StatelessWidget {
         FloatingActionButton.extended(
           heroTag: 'join',
           onPressed: () => _showJoinDialog(context),
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.deepPurple,
           icon: const Icon(Icons.login),
           label: const Text('Join Band'),
         ),

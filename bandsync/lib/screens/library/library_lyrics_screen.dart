@@ -17,12 +17,13 @@ class _LibraryLyricsScreenState extends State<LibraryLyricsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: const Text('Library'),
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           automaticallyImplyLeading: false,
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(100),
@@ -44,7 +45,7 @@ class _LibraryLyricsScreenState extends State<LibraryLyricsScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: colorScheme.surfaceContainer,
                     ),
                     onChanged: (value) => setState(() => _searchQuery = value),
                   ),
@@ -59,11 +60,20 @@ class _LibraryLyricsScreenState extends State<LibraryLyricsScreen> {
             ),
           ),
         ),
-        body: TabBarView(
-          children: [
-            SongsTab(searchQuery: _searchQuery),
-            const SetlistsTab(),
-          ],
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF090D17), Color(0xFF111E33), Color(0xFF221236)],
+            ),
+          ),
+          child: TabBarView(
+            children: [
+              SongsTab(searchQuery: _searchQuery),
+              const SetlistsTab(),
+            ],
+          ),
         ),
       ),
     );

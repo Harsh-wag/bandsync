@@ -31,12 +31,16 @@ class AudioAnalyzer:
             duration = librosa.get_duration(y=y, sr=sr)
             
             # AI analysis (optional, only if API key is set)
-            ai_insights = self.ai_analyzer.analyze_chord_progression(
-                key, scale, chord_progression, tempo
-            )
-            similar_songs = self.ai_analyzer.suggest_similar_songs(
-                key, scale, chord_progression
-            )
+            try:
+                ai_insights = self.ai_analyzer.analyze_chord_progression(
+                    key, scale, chord_progression, tempo
+                )
+                similar_songs = self.ai_analyzer.suggest_similar_songs(
+                    key, scale, chord_progression
+                )
+            except:
+                ai_insights = None
+                similar_songs = []
             
             return {
                 'tempo': round(tempo, 1),

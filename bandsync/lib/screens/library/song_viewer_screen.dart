@@ -75,7 +75,6 @@ class _SongViewerScreenState extends State<SongViewerScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(song.title),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
           IconButton(
             icon: Icon(_metronome.isPlaying ? Icons.stop : Icons.play_arrow),
@@ -103,7 +102,9 @@ class _SongViewerScreenState extends State<SongViewerScreen> {
         children: [
           Container(
             padding: const EdgeInsets.all(16),
-            color: _metronomeBeat ? Colors.green[100] : Colors.grey[200],
+            color: _metronomeBeat
+                ? Theme.of(context).colorScheme.tertiaryContainer
+                : Theme.of(context).colorScheme.surfaceContainerHighest,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -154,7 +155,7 @@ class _SongViewerScreenState extends State<SongViewerScreen> {
           if (widget.setlistSongs != null)
             Container(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              color: Colors.grey[200],
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -188,7 +189,7 @@ class _SongViewerScreenState extends State<SongViewerScreen> {
   Widget _buildTransposeBar() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      color: Colors.grey[100],
+      color: Theme.of(context).colorScheme.surfaceContainer,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

@@ -15,7 +15,6 @@ class SetlistDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(setlist.name),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
           IconButton(
             icon: const Icon(Icons.add),

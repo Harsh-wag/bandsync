@@ -101,7 +101,7 @@ class BandService {
   Future<List<Map<String, dynamic>>> getBandMembers(String bandId) async {
     final members = await _supabase
         .from('band_members')
-        .select('id, role, user_id, users!inner(name, email)')
+        .select('*, users!inner(name, email)')
         .eq('band_id', bandId);
     
     return List<Map<String, dynamic>>.from(members);
