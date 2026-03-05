@@ -1,7 +1,11 @@
 import librosa
 import numpy as np
+import warnings
 from .chord_recognizer import ChordRecognizer
 from .ai_analyzer import AIAnalyzer
+
+warnings.filterwarnings('ignore', category=UserWarning)
+warnings.filterwarnings('ignore', category=FutureWarning)
 
 class AudioAnalyzer:
     def __init__(self):
