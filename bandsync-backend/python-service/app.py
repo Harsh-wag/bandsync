@@ -21,6 +21,7 @@ def health_check():
 
 @app.route('/analyze', methods=['POST'])
 def analyze_audio():
+    filepath = None
     try:
         if 'audio' not in request.files:
             return jsonify({'error': 'No audio file provided'}), 400
@@ -42,11 +43,21 @@ def analyze_audio():
         result = analyzer.analyze(filepath)
         
         # Clean up
-        os.remove(filepath)
+        if filepath and os.path.exists(filepath):
+            os.remove(filepath)
         
         return jsonify(result), 200
         
     except Exception as e:
+        # Clean up on error
+        if filepath and os.path.exists(filepath):
+            try:
+                os.remove(filepath)
+            except:
+                pass
+        print(f"Error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
